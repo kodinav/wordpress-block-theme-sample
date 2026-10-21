@@ -1,0 +1,16 @@
+{
+	"name": "kodinav-wordpress-block-theme-sample",
+	"private": true,
+	"license": "GPL-2.0-or-later",
+	"description": "Local checks for the Kodinav sample block theme",
+	"type": "module",
+	"scripts": {
+		"start": "wp-playground-cli server --port=9400 --mount=.:/wordpress/wp-content/themes/kodinav-sample --blueprint=blueprint.json",
+		"test": "node tests/check-pages.mjs"
+	},
+	"devDependencies": {
+		"@axe-core/playwright": "4.13.0",
+		"@wp-playground/cli": "3.1.56",
+		"playwright": "1.63.0"
+	}
+}

@@ -1,0 +1,42 @@
+name: Checks
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  coding-standards:
+    name: WordPress coding standards
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          tools: composer
+      - run: composer install --no-progress
+      - run: vendor/bin/phpcs
+
+  pages:
+    name: Accessibility and layout
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Start WordPress with the theme
+        run: |
+          npm start > playground.log 2>&1 &
+          for i in $(seq 1 60); do curl -s -o /dev/null http://127.0.0.1:9400/ && exit 0; sleep 3; done
+          cat playground.log; exit 1
+      - run: npm test
+      - name: Keep the screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: tests/screenshots/

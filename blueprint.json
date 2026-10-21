@@ -1,0 +1,9 @@
+{
+	"$schema": "https://playground.wordpress.net/blueprint-schema.json",
+	"landingPage": "/",
+	"preferredVersions": { "php": "8.3", "wp": "latest" },
+	"steps": [
+		{ "step": "activateTheme", "themeFolderName": "kodinav-sample" },
+		{ "step": "setSiteOptions", "options": { "blogname": "Northfield Architects", "blogdescription": "Demo site for the Kodinav sample theme" } }
+	]
+}

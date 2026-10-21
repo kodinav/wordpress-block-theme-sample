@@ -1,0 +1,17 @@
+{
+	"name": "kodinav/wordpress-block-theme-sample",
+	"description": "A small WordPress block theme showing how Kodinav builds a studio's design.",
+	"type": "wordpress-theme",
+	"license": "GPL-2.0-or-later",
+	"require-dev": {
+		"wp-coding-standards/wpcs": "^3.4"
+	},
+	"scripts": {
+		"lint": "phpcs"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	}
+}
