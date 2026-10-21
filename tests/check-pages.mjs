@@ -14,11 +14,23 @@ const PAGES = ["/", "/?p=1", "/this-page-does-not-exist"];
 const WIDTHS = { phone: 390, tablet: 820, desktop: 1440 };
 
 mkdirSync("tests/screenshots", { recursive: true });
+process.on("unhandledRejection", (e) => {
+	if (process.env.GITHUB_ACTIONS) console.log(`::error title=Page check crashed::${currentPath} ${String(e).split("\n")[0]}`);
+	console.error(e);
+	process.exit(1);
+});
 const browser = await chromium.launch();
 let failures = 0;
-const fail = (msg) => { failures++; console.log(`  ✗ ${msg}`); };
+// On GitHub, each problem is also an annotation, so it shows on the commit without opening the log.
+const fail = (msg) => {
+	failures++;
+	console.log(`  ✗ ${msg}`);
+	if (process.env.GITHUB_ACTIONS) console.log(`::error title=Page check::${currentPath} ${msg}`);
+};
+let currentPath = "";
 
 for (const path of PAGES) {
+	currentPath = path;
 	console.log(path);
 	for (const [name, width] of Object.entries(WIDTHS)) {
 		const context = await browser.newContext({ viewport: { width, height: 900 } });

@@ -9,7 +9,7 @@ jobs:
     name: WordPress coding standards
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: shivammathur/setup-php@v2
         with:
           php-version: "8.3"
@@ -21,8 +21,8 @@ jobs:
     name: Accessibility and layout
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
@@ -31,12 +31,12 @@ jobs:
       - name: Start WordPress with the theme
         run: |
           npm start > playground.log 2>&1 &
-          for i in $(seq 1 60); do curl -s -o /dev/null http://127.0.0.1:9400/ && exit 0; sleep 3; done
+          for i in $(seq 1 100); do grep -q "Ready" playground.log && exit 0; sleep 3; done
           cat playground.log; exit 1
       - run: npm test
       - name: Keep the screenshots
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: screenshots
           path: tests/screenshots/
